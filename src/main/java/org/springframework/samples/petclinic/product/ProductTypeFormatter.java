@@ -1,24 +1,34 @@
 package org.springframework.samples.petclinic.product;
 
 import java.text.ParseException;
+import java.util.List;
 import java.util.Locale;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.Formatter;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ProductTypeFormatter implements Formatter<ProductType>{
 
-    @Override
-    public String print(ProductType object, Locale locale) {
-        // TODO Auto-generated method stub
-        return null;
-    }
+    @Autowired
+    ProductService productService;
 
     @Override
+    public String print(ProductType object, Locale locale) {
+        
+        return object.getName();
+    }
+ 
+    @Override
     public ProductType parse(String text, Locale locale) throws ParseException {
-        // TODO Auto-generated method stub
-        return null;
+
+        for (ProductType pt : this.productService.getAllProductTypes()){
+            if(pt.getName().equals(text))
+                return pt;
+        }
+        throw new ParseException("This is not a product type", 0);
+
     }
     
 }
